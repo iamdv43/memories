@@ -6,9 +6,7 @@ import Posts from './components/Posts/posts';
 import Form from './components/Form/form';
 import useStyles from './styles'
 import {getPosts} from './actions/posts'
-
 import { useDispatch } from 'react-redux';
-
 
 const App = () => {
     const [currentId, setCurrentId] = useState(null);
