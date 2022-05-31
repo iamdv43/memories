@@ -5,12 +5,13 @@ import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-
+import { signin, signup} from '../../actions/auth'
 
 import Icon from './Icon';
 import useStyles from './styles';
 import Input  from './Input';
+
+const initialState = { firstName: '', lastName: '', email: '', password: '', setPassword: ''}
 
 const Auth = () => {
 
@@ -20,9 +21,14 @@ const Auth = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    
+    const [showPassword, setShowPassword] = useState(false)
+    const [isSignUp, setIsSignUp] = useState(false);
+    const [formData, setFormData] = useState(initialState)
+
     useEffect(() => {
         function start() {
-          gapi.client.init({
+            gapi.auth2.init({
             clientId: gClientId,
             scope: ""
           })
@@ -31,17 +37,18 @@ const Auth = () => {
         gapi.load('client:auth2', start);
     });
 
+    const handleSubmit = (e) =>{
+        e.preventDefault();
 
-
-    const [showPassword, setShowPassword] = useState(false)
-    const [isSignUp, setIsSignUp] = useState(false);
-
-    const handleSubmit = () =>{
-
+        if(isSignUp){
+            dispatch(signup(formData, navigate))
+        }else{ 
+            dispatch(signin(formData, navigate))
+        }
     };
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
@@ -85,7 +92,7 @@ const Auth = () => {
                     )}
                     <Input name='email' label='Email' handleChange={handleChange} type='email' />
                     <Input name='password' label='Password' handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} />
-                    {isSignUp && <Input name='confirmPassword' label='Repeat Password' handleChange={handleChange} type='password'/>}                     
+                    {isSignUp && <Input name='setPassword' label='Repeat Password' handleChange={handleChange} type='password'/>}                     
                 </Grid>
                 
                 <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
