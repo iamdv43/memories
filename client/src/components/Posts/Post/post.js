@@ -30,7 +30,7 @@ const Post = ( {post, setCurrentId} ) => {
       };
 
     return ( 
-        <Card className={classes.card}>
+        <Card className={classes.card} raised elevation={6}>
             {!post.selectedFile ? (
                 <div className={classes.media} title={post.title} />
             ) : (
@@ -38,7 +38,9 @@ const Post = ( {post, setCurrentId} ) => {
             )}
         
             <div className={classes.overlay}>
-                <Typography variant='h6'>{post.name}</Typography>
+                <div>
+                    <Typography variant='h6'>{post.name}</Typography>
+                </div>
                 <Typography variant='h6'>{moment(post.createdAt).fromNow()}</Typography>
             </div>
             {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
@@ -49,11 +51,11 @@ const Post = ( {post, setCurrentId} ) => {
             </div>
             )}
             <div className={classes.details}>
-                <Typography variant='body2' color='textSecondary'>{post.tags.map((tag) => `#${tag} `)}</Typography>
+                <Typography variant='h6' color='textSecondary'>{post.tags.map((tag) => `#${tag} `)}</Typography>
             </div>
-            <Typography className={classes.title} gutterBottom variant="h5" component="h2">{post.title}</Typography>
+            <Typography className={classes.title} gutterBottom variant="h6" component="h2">{post.title}</Typography>
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
+                <Typography variant="h6" color="textSecondary" component="p">{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions} >
                 <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
